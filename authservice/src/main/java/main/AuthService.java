@@ -13,7 +13,6 @@ public class AuthService {
 		}
 		User user = new User(username, password);
 		userDAO.save(user);
-		System.out.println("User registered successfully.");
 		return true;
 	}
 

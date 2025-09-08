@@ -1,10 +1,6 @@
 package main;
 
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
@@ -12,47 +8,73 @@ import java.util.Optional;
 public class Request {
 
 	public final String method;
-	public final String path;
-	public final String query;
-	public final String httpVersion;
+	public final String url;
 	public final Map<String, String> headers;
-	public final byte[] body;
+	public final Map<String, String> queryParams;
+	public final String body;
 
-	public Request(String method, String path, String query, String httpVersion,
-                Map<String, String> headers, byte[] body) {
-        this.method = method;
-        this.path = path;
-        this.query = query;
-        this.httpVersion = httpVersion;
-        this.headers = headers;
-        this.body = body;
-    }
+	public Request(Builder builder) {
+		this.method = builder.method;
+		this.url = builder.url;
+		this.headers = builder.headers;
+		this.queryParams = builder.queryParams;
+		this.body = builder.body;
+	}
 
 	public Optional<String> header(String name) {
 		return Optional.ofNullable(headers.get(name.toLowerCase(Locale.ROOT)));
 	}
-
-	public String bodyAsString() {
-		return new String(body, StandardCharsets.UTF_8);
-	}
 	
-	public static String decode(String s) {
-		try {
-			return URLDecoder.decode(s, StandardCharsets.UTF_8);
-		} catch (Exception e) {
-			return s;
-		}
+	public static Builder builder() {
+		return new Builder();
 	}
 
-	public Map<String, List<String>> queryParams() {
-		Map<String, List<String>> params = new LinkedHashMap<>();
-		if (query == null || query.isEmpty()) return params;
-		for (String pair : query.split("&")) {
-			int idx = pair.indexOf('=');
-			String k = idx >= 0 ? decode(pair.substring(0, idx)) : decode(pair);
-			String v = idx >= 0 ? decode(pair.substring(idx + 1)) : "";
-			params.computeIfAbsent(k, kk -> new ArrayList<>()).add(v);
+	public static class Builder {
+		private String method;
+		private String url;
+		private Map<String, String> headers = new HashMap<>();
+		private Map<String, String> queryParams = new HashMap<>();
+		private String body;
+
+		public Builder method(String method) {
+			this.method = method;
+			return this;
 		}
-		return params;
+
+		public Builder url(String url) {
+			this.url = url;
+			return this;
+		}
+
+		public Builder header(String key, String value) {
+			this.headers.put(key, value);
+			return this;
+		}
+		
+		public Builder headers(Map<String, String> headers) {
+			this.headers = headers;
+			return this;
+		}
+
+		public Builder queryParam(String key, String value) {
+			this.queryParams.put(key, value);
+			return this;
+		}
+		
+		public Builder queryParams(Map<String, String> queryParams) {
+			this.queryParams = queryParams;
+			return this;
+		}
+
+		public Builder body(String body) {
+			this.body = body;
+			return this;
+		}
+
+		public Request build() {
+			if (method == null || url == null)
+				throw new IllegalStateException("HTTP Method and URL must be provided.");
+			return new Request(this);
+		}
 	}
 }
