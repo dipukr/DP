@@ -1,4 +1,4 @@
-package main;
+package logger;
 
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;

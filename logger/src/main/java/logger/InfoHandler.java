@@ -1,4 +1,4 @@
-package main;
+package logger;
 
 public class InfoHandler extends LogHandler {
 
