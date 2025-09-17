@@ -1,9 +1,7 @@
 public class Snake {
 
-	public Cell head;
-	public List<Cell> body;
-	public boolean dead;
-
+	public List<Cell> body = new LinkedList<>();
+	public boolean dead = false;
 
 	public void move(Dir dir) {
 
