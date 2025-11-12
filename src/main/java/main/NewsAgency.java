@@ -3,7 +3,7 @@ package main;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewsAgency  implements Subject<News> {
+public class NewsAgency implements Subject<News> {
 
 	private List<Observer<News>> observers = new ArrayList<>();
 	

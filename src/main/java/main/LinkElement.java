@@ -1,10 +1,10 @@
 package main;
 
-public class HyperlinkElement implements Element {
+public class LinkElement implements Element {
 
 	private String url;
 	
-	public HyperlinkElement(String url) {
+	public LinkElement(String url) {
 		this.url = url;
 	}
 	

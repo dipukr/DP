@@ -13,7 +13,7 @@ public class ExporterPDF implements Visitor {
 	}
 
 	@Override
-	public void visit(HyperlinkElement element) {
+	public void visit(LinkElement element) {
 		Console.draw("Exporting link: %s", element.url());
 	}
 }

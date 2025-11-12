@@ -13,7 +13,7 @@ public class RendererPDF implements Visitor {
 	}
 
 	@Override
-	public void visit(HyperlinkElement element) {
+	public void visit(LinkElement element) {
 		Console.draw("Rendering link: %s", element.url());
 	}
 }
